@@ -10,6 +10,8 @@ export default function (state = initialState.videos, action) {
       return [...state, action.videos];
     case types.SELECTED_VIDEO:
       return {...state, selectedVideo: action.video }; //spread operators to make and update the new copy of the current state tree.
+    // case types.LIKE_MEDIA:
+    //   return {...state, likedVideo: action.video };
     default:
       return state;
   }

@@ -9,6 +9,8 @@ export default function (state = initialState.images, action){
       return [...state, action.images];
     case types.SELECTED_IMAGE:
       return {...state, selectedImage: action.image };
+    // case types.LIKE_MEDIA:
+    //   return {...state, likedImage: action.image }
     default:
       return state;
   }

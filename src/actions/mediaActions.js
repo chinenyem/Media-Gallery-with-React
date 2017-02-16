@@ -18,3 +18,10 @@ export const searchMediaAction = (payload) => ({
   type: types.SEARCH_MEDIA_REQUEST,
   payload
 });
+
+
+//Returns an action type LIKE_MEDIA 
+export const likeMediaAction = (liked) => ({
+  type: types.LIKE_MEDIA,
+  liked
+});

@@ -14,4 +14,6 @@ export default (
     <IndexRoute component={HomePage} />
     <Route path="library" component={MediaGalleryPage} />
   </Route>
+
+  
 );

@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { flickrImages, shutterStockVideos } from '../Api/api';
 import {connect} from 'react-redux';
-import {selectImageAction, searchMediaAction, selectVideoAction } from '../actions/mediaActions';
+import {selectImageAction, searchMediaAction, selectVideoAction, likeMediaAction } from '../actions/mediaActions';
+import LoadPage from '../components/LoaderPage';
 import PhotoPage from '../components/PhotoPage';
 import VideoPage from '../components/VideoPage';
 import '../styles/style.css';
 
 
 // MediaGalleryPage Component
+
+
+  var liked = true,
+      buttonClass = liked ? 'active' : '';
 
 class MediaGalleryPage extends Component {
 
@@ -16,14 +21,50 @@ class MediaGalleryPage extends Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelectImage = this.handleSelectImage.bind(this);
     this.handleSelectVideo = this.handleSelectVideo.bind(this);
+    //this.toggleLiked = this.toggleLiked.bind(this);
+    this.state = { liked:false };
   }
 
-  // We want to get images and videos from the APU right after our Component renders.
+
+
+
+  // We want to get images and videos from the API right after our Component renders.
   componentDidMount(){
-    this.props.dispatch(searchMediaAction('rain'));
-    flickrImages('rain').then(images => console.log(images, 'Images'));
-    shutterStockVideos('rain').then(videos => console.log(videos, 'Videos'));
+    this.props.dispatch(searchMediaAction('puppy'));
+
+    setTimeout(function() {
+        this.setState({loaded: true})
+    }.bind(this), 3000);
+
+    this.setState({
+        liked:false
+    })
+
+    //flickrImages('show').then(images => console.log(images, 'Images'));
+    //shutterStockVideos('show').then(videos => console.log(videos, 'Videos'));
+
   }
+
+  //Dispatches *likeMedia* when like is clicked
+  // handleLikeMedia(likedMedia){
+  //   this.props.dispatch(likeMediaAction(likedMedia));
+  // }
+
+
+  //
+  // toggleLiked(){
+  //   event.preventDefault();
+  //     console.log(liked)
+  //     liked = !liked;
+  //     buttonClass = liked ? 'active' : '';
+  //     console.log(buttonClass)
+  //     return buttonClass
+  //
+  //
+  //
+  // }
+
+
 
     // Dispatches *selectImageAction* when any image is clicked
    handleSelectImage(selectedImage) {
@@ -45,8 +86,24 @@ class MediaGalleryPage extends Component {
      }
    }
 
+  //  toggleLiked(buttonClass) {
+  //      //event.preventDefault();
+  //      console.log("hello")
+  //     //let buttonClass = this.state.liked ? 'active' : '';
+  //     //this.props.dispatch(likeMediaAction(this.state({
+  //       liked = !liked
+  //       this.setState({
+  //           liked
+  //       })
+  //     //})));
+  //  }
+
    render() {
      const { images, selectedImage, videos, selectedVideo } = this.props;
+
+     //this.buttonClass = this.state.liked ? 'active' : '';
+
+
      return (
        <div className="container-fluid">
          {images ? <div>
@@ -58,17 +115,20 @@ class MediaGalleryPage extends Component {
         className="btn btn-primary"
              value="Search Library"
              onClick={this.handleSearch}/>
-           <div className="row">
-             <PhotoPage
-               images={images}
-               selectedImage={selectedImage}
-               onHandleSelectImage={this.handleSelectImage}/>
-             <VideoPage
-               videos={videos}
-               selectedVideo={selectedVideo}
-               onHandleSelectVideo={this.handleSelectVideo}/>
-           </div>
-         </div> : 'loading ....'}
+      
+         {this.state.loaded ?
+               <div className="row">
+                  <PhotoPage
+                   images={images}
+                   selectedImage={selectedImage}
+                   onHandleSelectImage={this.handleSelectImage}/>
+                 <VideoPage
+                   videos={videos}
+                   selectedVideo={selectedVideo}
+                   onHandleSelectVideo={this.handleSelectVideo}/>
+               </div>
+          : <LoadPage/>}
+         </div> : <LoadPage/>}
        </div>
      );
    }
